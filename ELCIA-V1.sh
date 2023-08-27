@@ -16,19 +16,17 @@ echo " Elastic & ChatGPT Integration Application"
 echo -e "\n\n\n\n\n\n\n"
 echo "You can choose to either:"
 echo ""
-echo "Configure an Elastic Cloud instance with ChatGPT using sentence transformers for title vectorization" 
+echo "Configre an Elastic Cloud instance with ChatGPT" 
 echo ""
-echo "Configure an Elastic Cloud instance with ChatGPT using ELSER for title, body, description, and keyword fields for semantic search"
+echo "Configre an Elastic Cloud instance with ChatGPT to answer like a pirate" 
 echo ""
-echo "Configure an Elastic Cloud instance with ChatGPT using sentence transformers for title vectorization & ELSER for title, body, description, and keyword fields for semantic search"
+echo "Configre an Elastic Cloud instance with ChatGPT to answer like an angry drunk"
 echo ""
-echo "Configure an Elastic Cloud instance for Image Similarity search.  This will require manual intervention to load PPTXs files and will only with that extension."
-# NEED FOR SPLITTING PDFS TO JPGS AND KEEPING THE NAME EN MASSE:  'for f in *.pdf; do convert -density 150 "$f" "${f%pdf}jpg"; done' 
+echo "Configre an Elastic Cloud instance with ChatGPT to answer like a little kid"
+echo ""
+echo "Configre an Elastic Cloud instance with ChatGPT to answer like a ganster rapper"
+echo ""
 echo "Just download the guts, and do the rest yourself"
-echo -e "\n\n\n"
-echo "WARNING: CURRENTLY ELCIA ONLY SUPPORTS OPENAI NOT AZURE'S OPENAI.  Please obtain your personal openai key here:"
-echo ""
-echo "https://platform.openai.com/"
 echo -e "\n\n\n"
 echo "But first we must run a few commands to get ready."
 echo -e "\n\n\n"
@@ -39,20 +37,23 @@ clear
 clear
 #
 cmd=(dialog --radiolist "Which would you like to do?" 22 135 16)
-options=(1 "Configure an Elastic Cloud instance with ChatGPT using sentence transformers for title vectorization" off    # any option can be set to default to "on"
-         2 "Configure an Elastic Cloud instance with ChatGPT using ELSER for title, body, description, and keyword fields for semantic search" off
-         3 "Configure an Elastic Cloud instance with ChatGPT using sentence transformers for title vectorization & ELSER for title, body, description, and keyword fields for semantic search" off
-         4 "Just download the guts, and do the rest yourself" off
-         5 "Make like a tree, and leave." off)
+options=(1 "Configre an Elastic Cloud instance with ChatGPT" off    # any option can be set to default to "on"
+         2 "Configre an Elastic Cloud instance with ChatGPT to answer like a pirate" off
+         3 "Configre an Elastic Cloud instance with ChatGPT to answer like an angry drunk" off
+         4 "Configre an Elastic Cloud instance with ChatGPT to answer like a little kid" off
+	 5 "Configre an Elastic Cloud instance with ChatGPT to answer like a ganster rapper" off
+         6 "Just download the guts, and do the rest yourself" off
+         7 "Make like a tree, and leave." off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
 do
     case $choice in
-# Configre an Elastic Cloud instance with ChatGPT using sentence transformers for title vectorization
+# Configre an Elastic Cloud instance with ChatGPT
         1)      clear
+echo "This is designed to be run on a minimal server install of Ubuntu 22.04 AFTER 'sudo apt update' has been run and the system was rebooted."
 echo ""
-echo "You will need a version 8.8+ cluster with an ML node with at least 4GB of RAM, as well as login credentials and your cluster's ES endpoint."
+echo "You will also need a version 8.8+ cluster with an ML node with at least 4GB of RAM, as well as login credentials and your cluster's ES endpoint."
 echo ""
 echo "So please make sure you have all of this prior to continuing."
 echo ""
@@ -234,39 +235,19 @@ echo "        st.write(f\"ChatGPT: {answer.strip()}\n\nDocs: {url}\")" | sudo te
 echo ""
 echo ""
 echo ""
-echo "Now let's configure streamlit (the web UI) to run as a service, and all you'll have to do is crawl!"
-echo ""
-echo ""
-echo "[Unit]" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "After=network.target" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "[Service]" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "ExecStart=/usr/local/bin/chatgpt.sh" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "[Install]" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "WantedBy=default.target" | sudo tee -a /etc/systemd/system/chatgpt4all.service
-echo "#!/bin/bash" | sudo tee -a /usr/local/bin/chatgpt.sh
-echo "export cloud_id=${cloud_id}" | sudo tee -a /usr/local/bin/chatgpt.sh
-echo "export cloud_user=${cloud_user}" | sudo tee -a /usr/local/bin/chatgpt.sh
-echo "export cloud_pass=${cloud_pass}" | sudo tee -a /usr/local/bin/chatgpt.sh
+echo "Now let's start the web UI, and all you'll have to do is crawl!"
+export cloud_id=${cloud_id}
+export cloud_user=${cloud_user}
+export cloud_pass=${cloud_pass}
 echo ""
 echo "What is your Open AI api key?"
 echo ""
 read openai_api
-echo "export openai_api=${openai_api}" | sudo tee -a /usr/local/bin/chatgpt.sh
-echo "streamlit run /home/$USER/eland/chatgpt4all.py" | sudo tee -a /usr/local/bin/chatgpt.sh
-sudo chmod 744 /usr/local/bin/chatgpt.sh
-sudo chmod 664 /etc/systemd/system/chatgpt4all.service
-sudo systemctl daemon-reload
-sudo systemctl enable chatgpt4all.service
-echo "The Chat GPT Service is now running, please go ahead and crawl!!!"""
-echo ""
-echo "Feel free to press ctrl + c to exit out of the status message"
-echo ""
-sudo systemctl status chatgpt4all.service
+export openai_api=${openai_api}
+streamlit run /home/$USER/eland/chatgpt4all.py
 ;;
 #
-# Configre an Elastic Cloud instance with ChatGPT using ELSER for title, body, description, and keyword fields for semantic search
+# Configre an Elastic Cloud instance with ChatGPT to answer like a pirate
 #
 2)      clear
 echo "This is designed to be run on a minimal server install of Ubuntu 22.04 AFTER 'sudo apt update' has been run and the system was rebooted."
@@ -278,14 +259,10 @@ echo ""
 echo ""
 echo ""
 read -n 1 -s -r -p "Press any key to continue"
-sudo apt install docker.io* python3-pip* curl tar -y
+sudo apt install docker.io* python3-pip* curl -y
 sudo pip install streamlit
 sudo pip install openai
 sudo pip install Elasticsearch
-cd /home/$USER && curl https://codeload.github.com/elastic/elasticsearch-labs/tar.gz/main | tar -xz --strip=2 elasticsearch-labs-main/esre-examples/python-flask-example
-cd /home/$USER && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-source ~/.bashrc
-nvm install 18.16.1
 clear
 echo ""
 echo "What is your username?  Typically it is just 'elastic'."
@@ -307,35 +284,7 @@ echo ""
 echo ""
 read es_client
 echo ""
-echo "What is your Open AI api key?"
 echo ""
-read openai_api_key
-echo ""
-echo "Now let's set those secrets here: /home/$USER/python-flask-example/api/.env" 
-echo ""
-echo "openai_type=openai" | sudo tee -a /home/$USER/python-flask-example/api/.env
-echo "openai_api_model=\"gpt-3.5-turbo-0613\"" | sudo tee -a /home/$USER/python-flask-example/api/.env
-echo "openai_api_key=${openai_api_key}" | sudo tee -a /home/$USER/python-flask-example/api/.env 
-echo "cloud_id=${cloud_id}" | sudo tee -a /home/$USER/python-flask-example/api/.env 
-echo "cloud_pass=${cloud_pass}" | sudo tee -a /home/$USER/python-flask-example/api/.env 
-echo "cloud_user=${cloud_user}" | sudo tee -a /home/$USER/python-flask-example/api/.env 
-echo ""
-echo "Would you like to customize the UI logo?  If so, it may be found here:"
-echo ""
-echo "/home/$USER/python-flask-example/frontend/src/components/images/elasticTypeMark.png"
-echo ""
-echo "Would you like to customize the question suggestions?  If so, it may be found here:"
-echo ""
-echo "/home/$USER/python-flask-example/frontend/src/App.tsx"
-echo ""
-read -n 1 -s -r -p "Press any key to continue"
-
-
-
-
-
-
-
 echo "Next we'll load the sentence transformers model into your cluster using Docker!"
 echo ""
 cd /home/$USER && git clone https://github.com/elastic/eland.git && cd eland && sudo docker build -t elastic/eland . && sudo docker run -it --rm --network host elastic/eland eland_import_hub_model --url https://${cloud_user}:${cloud_pass}@${es_client}:9243/ --hub-model-id sentence-transformers/all-distilroberta-v1  --start
